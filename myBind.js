@@ -1,3 +1,24 @@
+//! METHOD 1: USING CALL OR APPLY METHOD
+
+Function.prototype.myBind1 = function (context, ...args1) {
+
+    const fn = this;
+    return function (...args2) {
+        fn.apply(context, [...args1, ...args2]);
+    }
+}
+
+//! METHOD 2: WITHOUT USING CALL OR APPLY METHOD
+Function.prototype.myBind2 = function (context, ...args1) {
+
+    context._this = this;
+
+    return function (...args2) {
+        return context._this(...args1, ...args2);
+    }
+}
+
+
 const akash = {
     firstName: "Akash",
     lastName: "Chitransh"
@@ -13,16 +34,10 @@ function printFullName(city, country) {
 }
 
 
-Function.prototype.myBind = function (name, ...args1) {
 
-    const pointer = this;
-    return function (...args2) {
-        pointer.apply(name, [...args1, ...args2]);
-    }
-}
 
-const printAkashFullName = printFullName.myBind(akash, 'Indore');
-const printAnushikaFullName = printFullName.myBind(anushika, 'Perth', 'Aurtralia');
+const printAkashFullName = printFullName.myBind1(akash, 'Indore');
+const printAnushikaFullName = printFullName.myBind2(anushika, 'Perth', 'Aurtralia');
 
 printAkashFullName('India');
 printAnushikaFullName();
